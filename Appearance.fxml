@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+   <children>
+      <VBox fx:id="progress" layoutX="75.0" layoutY="97.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" layoutX="366.0" layoutY="54.0" text="RC2 Verschlüsselung" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label alignment="CENTER" text="Input" textAlignment="CENTER" underline="true">
+                           <font>
+                              <Font name="System Italic" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label text="Dateipfad:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="inputFile" promptText="Geben Sie den Pfad zu der Eingabe - Datei ein oder wählen Sie im Dialog eine aus." HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#handleChooseInFile" text="..." />
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox spacing="10.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefWidth="160.0" spacing="10.0">
+                           <children>
+                              <Label text="Was möchten Sie" />
+                              <Label text="ver-/ entschlüsseln?">
+                                 <VBox.margin>
+                                    <Insets top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <RadioButton fx:id="radioFile" mnemonicParsing="false" text="Datei">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="fileOrText" />
+                                 </toggleGroup>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="radioText" mnemonicParsing="false" selected="true" text="Text" toggleGroup="$fileOrText">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                           </children>
+                        </VBox>
+                        <TextArea fx:id="inputText" promptText="Geben Sie hier Ihren Text ein." HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </TextArea>
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Schlüssel" underline="true">
+                     <font>
+                        <Font name="System Italic" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="inputKey" layoutX="556.0" layoutY="107.0" prefWidth="350.0">
+                     <HBox.margin>
+                        <Insets left="70.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#handleEncrypt" text="Verschlüsseln" />
+                        <Button layoutX="636.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleDecrypt" text="Entschlüsseln" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="30.0" right="20.0" />
+               </padding>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label alignment="CENTER" text="Output" textAlignment="CENTER" underline="true">
+                           <font>
+                              <Font name="System Italic" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <Label text="Dateipfad:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="outputFile" promptText="Geben Sie den Pfad zu einer Ausgabe - Datei ein oder wählen Sie im Dialog eine aus." HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#handleChooseOutFile" text="..." />
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox spacing="10.0">
+                     <children>
+                        <TextArea fx:id="outputText" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </TextArea>
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox spacing="20.0">
+               <children>
+                  <Label text="Fortschritt:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <ProgressBar progress="0.0" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
