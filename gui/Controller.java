@@ -7,7 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import useful.Krypto;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -150,13 +152,32 @@ public class Controller
 			RandomAccessFile infile = new RandomAccessFile(file1, "r");
 			RandomAccessFile outfile = new RandomAccessFile(file2, "rw");
 			
-			long block = infile.readLong();
+			long len = infile.length(); 	// in Bytes
+			long diff = len % 8; 			// Anzahl der restlichen Bytes am Ende der Datei (kein vollst. long mehr)
+			byte added = (byte) (8 - diff); // Anzahl der angefügten Null-Bytes
+			long block;
 			
-			while(block != -1)
-			{				
-				outfile.writeLong(RC2.encryptLong(block, inputKey.getText()));
+			//An den Anfang der Datei die Anzahl der angefügten Null-Bytes schreiben:
+			outfile.write(added);
+			
+			//Vollständige Long-Werte verschlüsseln:
+			for(int i=0; i < (int)(len / 8); i++)
+			{
 				block = infile.readLong();
+				outfile.writeLong(RC2.encryptLong(block, inputKey.getText()));
 			}
+			
+			//Um den Rest kümmern:
+
+			long rest = 0;
+			int[] shift = {7, 6, 5, 4, 3, 2, 1, 0}; //0 eig. unnötig
+			for(int i=0; i < diff; i++)
+			{
+				rest += ( (long)(infile.readByte()) << (shift[i] * 8) );
+			}
+			
+			//Rest verschlüsseln:
+			outfile.writeLong(RC2.encryptLong(rest, inputKey.getText()));
 			
 			infile.close();
 			outfile.close();
@@ -164,7 +185,8 @@ public class Controller
 		catch(NullPointerException | FileNotFoundException e)
 		{
 			inputFile.setText("Bitte geben Sie einen gültigen Dateipfad an.");
-		} catch (IOException e)
+		}
+		catch(IOException w)
 		{
 			
 		}
@@ -199,12 +221,26 @@ public class Controller
 			RandomAccessFile infile = new RandomAccessFile(file1, "r");
 			RandomAccessFile outfile = new RandomAccessFile(file2, "rw");
 			
-			long block = infile.readLong();
+			long block;
+			long len = infile.length() - 1; // 1 Byte für die Info am Anfang abziehen
 			
-			while(block != -1)
-			{				
-				outfile.writeLong(RC2.decryptLong(block, inputKey.getText()));
+			//Auslesen der Anzahl der angefügten Null-Bytes:
+			byte added = infile.readByte();
+						
+			//alles außer den letzten 8 Byte entschlüsseln:
+			for(int i=0; i < (int)(len / 8 -1); i++)
+			{
 				block = infile.readLong();
+				outfile.writeLong(RC2.decryptLong(block, inputKey.getText()));
+			}
+			
+			block = infile.readLong();
+			long last = RC2.decryptLong(block, inputKey.getText());
+			byte[] lastBytes = Krypto.longToBytes(last);
+			
+			for(int i=0; i < (8 - added); i++)
+			{
+				outfile.write(lastBytes[i]);;
 			}
 			
 			infile.close();
