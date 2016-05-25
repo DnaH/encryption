@@ -108,7 +108,6 @@ public class Krypto
 		return ( (in0 << 48) + (in1 << 32) + (in2 << 16) + in3);
 	}
 	
-	
 	public static byte[] longToBytes(long l) {
 	    byte[] result = new byte[8];
 	    for (int i = 7; i >= 0; i--) {
@@ -116,16 +115,5 @@ public class Krypto
 	        l >>= 8;
 	    }
 	    return result;
-	}
-	
-	public static void main(String[] args)
-	{
-		long a = 7851678454653875325L;
-		char b = (char)(a >>> 48 & 0xffff);
-		System.out.println(b);
-		long c = b;
-		System.out.println(a);
-		
-		System.out.println(mergeLong(splitLong(a)));
 	}
 }
